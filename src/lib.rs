@@ -31,20 +31,6 @@ enum LoHiRegister {
 }
 
 #[derive(Debug, Clone, Copy)]
-enum AddSubtractOpCode {
-    ADD,
-    SUB
-}
-
-#[derive(Debug, Clone, Copy)]
-struct AddSubtract {
-    op: AddSubtractOpCode,
-    roi: RegisterOrImmediate,
-    src: Register,
-    dest: Register
-}
-
-#[derive(Debug, Clone, Copy)]
 enum MoveCompareAddSubtractImmediateOpCode {
     MOV,
     CMP,
