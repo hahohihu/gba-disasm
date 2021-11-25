@@ -1,6 +1,7 @@
 mod types;
 mod thumb {
     mod msr;
+    mod addsub;
 }
 
 use types::*;
