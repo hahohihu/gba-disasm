@@ -1,31 +1,14 @@
-#[derive(Debug, Clone, Copy)]
-struct Register(u8);
-type Immediate = u8;
-#[derive(Debug, Clone, Copy)]
-enum RegisterOrImmediate {
-    Register(Register),
-    Immediate(Immediate)
+mod types;
+mod thumb {
+    mod msr;
 }
+
+use types::*;
 
 #[derive(Debug, Clone, Copy)]
 enum LoHiRegister {
     Lo(Register),
     Hi(u8)
-}
-
-#[derive(Debug, Clone, Copy)]
-enum MoveShiftedRegisterOpCode {
-    LSL,
-    LSR,
-    ASR
-}
-
-#[derive(Debug, Clone, Copy)]
-struct MoveShiftedRegister {
-    op: MoveShiftedRegisterOpCode, // TODO: enum
-    offset: Immediate,
-    src: Register,
-    dest: Register
 }
 
 #[derive(Debug, Clone, Copy)]
