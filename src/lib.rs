@@ -83,19 +83,17 @@ struct HiRegisterOp {
     dst: LoHiRegister
 }
 
-// TODO
-struct CPU {}
-
-trait ThumbInstruction {
-    fn execute(&self, cpu: &mut CPU);
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ThumbInstruction {
+    MSR(MoveShiftedRegister)
 }
 
-fn decode_thumb(raw: u16) -> Box<dyn ThumbInstruction> {
+fn decode_thumb(raw: u16) -> ThumbInstruction {
     match raw >> 13 {
         0b000 => {
             match raw >> 11 {
                 0b11 => unimplemented!(),
-                _ => Box::new(MoveShiftedRegister::from(raw))
+                _ => ThumbInstruction::MSR(MoveShiftedRegister::from(raw))
             }
         },
         0b001 => unimplemented!(),

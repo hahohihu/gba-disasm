@@ -1,5 +1,4 @@
 use crate::types::{Register, Immediate};
-use crate::{ThumbInstruction, CPU, decode_thumb};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum MoveShiftedRegisterOpCode {
@@ -39,36 +38,33 @@ impl From<u16> for MoveShiftedRegister {
     }
 }
 
-impl ThumbInstruction for MoveShiftedRegister {
-    fn execute(&self, cpu: &mut CPU) {
-        unimplemented!();
-    }
-}
-
 #[cfg(test)]
 mod test {
     use crate::thumb::msr::{MoveShiftedRegister, MoveShiftedRegisterOpCode};
-    use crate::Register;
+    use crate::{Register, ThumbInstruction, decode_thumb};
 
     #[test]
     fn values() {
-        assert_eq!(MoveShiftedRegister {
+        let matches = [(MoveShiftedRegister {
             op: MoveShiftedRegisterOpCode::LSL,
             offset: 0b11001,
             src: Register(0b100),
             dest: Register(0b011)
-        }, MoveShiftedRegister::from(0b000_00_11001_100_011));
-        assert_eq!(MoveShiftedRegister {
+        }, 0b000_00_11001_100_011 as u16),
+        (MoveShiftedRegister {
             op: MoveShiftedRegisterOpCode::LSR,
             offset: 0b10000,
             src: Register(0b001),
             dest: Register(0b111)
-        }, MoveShiftedRegister::from(0b000_01_10000_001_111));
-        assert_eq!(MoveShiftedRegister {
+        }, 0b000_01_10000_001_111 as u16),
+        (MoveShiftedRegister {
             op: MoveShiftedRegisterOpCode::ASR,
             offset: 0b11001,
             src: Register(0b100),
             dest: Register(0b011)
-        }, MoveShiftedRegister::from(0b000_10_11001_100_011));
+        }, 0b000_10_11001_100_011 as u16)];
+        for (msr, binary) in matches {
+            assert_eq!(ThumbInstruction::MSR(msr), decode_thumb(binary));
+        }
     }
 }
