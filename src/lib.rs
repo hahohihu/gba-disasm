@@ -1,9 +1,10 @@
 mod types;
 mod thumb {
-    mod msr;
+    pub mod msr;
 }
 
 use types::*;
+use thumb::msr::MoveShiftedRegister;
 
 #[derive(Debug, Clone, Copy)]
 enum LoHiRegister {
@@ -91,16 +92,20 @@ trait ThumbInstruction {
 
 fn decode_thumb(raw: u16) -> Box<dyn ThumbInstruction> {
     match raw >> 13 {
-        0b000 => {},
-        0b001 => {},
-        0b010 => {},
-        0b011 => {},
-        0b100 => {},
-        0b101 => {},
-        0b110 => {},
-        0b111 => {},
+        0b000 => {
+            match raw >> 11 {
+                0b11 => unimplemented!(),
+                _ => Box::new(MoveShiftedRegister::from(raw))
+            }
+        },
+        0b001 => unimplemented!(),
+        0b010 => unimplemented!(),
+        0b011 => unimplemented!(),
+        0b100 => unimplemented!(),
+        0b101 => unimplemented!(),
+        0b110 => unimplemented!(),
+        0b111 => unimplemented!(),
         _ => unreachable!("DEV ERROR")
     }
-    unimplemented!();
 }
 
