@@ -4,6 +4,7 @@ mod thumb {
     pub mod addsub;
     pub mod alu;
     pub mod pcrl;
+    pub mod load_store_halfword;
 }
 
 use types::*;
