@@ -3,6 +3,7 @@ mod thumb {
     pub mod msr;
     pub mod addsub;
     pub mod alu;
+    pub mod pcrl;
 }
 
 use types::*;
