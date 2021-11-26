@@ -3,6 +3,9 @@ mod thumb {
     pub mod msr;
     pub mod addsub;
     pub mod op_immediate;
+    pub mod alu;
+    pub mod load_store_ext;
+    pub mod pcrl;
 }
 
 use types::*;
@@ -26,37 +29,18 @@ macro_rules! get_bits {
     }};
 }
 
+pub fn get_bit(input: u16, n: u8) -> u8 { 
+    if (input & (1 << n)) != 0 { 
+        1
+    } else {
+        0
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 enum LoHiRegister {
     Lo(Register),
     Hi(u8)
-}
-
-#[derive(Debug, Clone, Copy)]
-enum AluOperationsOpCode {
-    AND,
-    EOR,
-    LSL,
-    LSR,
-    ASR,
-    ADC,
-    SBC,
-    ROR,
-    TST,
-    NEG,
-    CMP,
-    CMN,
-    ORR,
-    MUL,
-    BIC,
-    MVN
-}
-
-#[derive(Debug, Clone, Copy)]
-struct AluOperations {
-    op: AluOperationsOpCode,
-    src: Register,
-    dest: Register
 }
 
 #[derive(Debug, Clone, Copy)]
