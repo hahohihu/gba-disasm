@@ -8,24 +8,27 @@ mod thumb {
 use types::*;
 use thumb::msr::MoveShiftedRegister;
 
+// Inclusive range - descending, with 0 on the right, similar to the ARM7 datasheet
+#[macro_export]
+macro_rules! get_bits {
+    ($num:expr, $lhs:literal..$rhs:literal) => {{
+        assert!($lhs >= $rhs);
+        ($num >> $rhs) & ((1 << ($lhs + 1 - $rhs)) - 1)
+    }};
+    ($num:expr, $lhs:literal..) => {{
+        assert!($lhs >= 0);
+        $num & ((1 << $lhs) - 1)
+    }};
+    ($num:expr, ..$rhs:literal) => {{
+        assert!($rhs >= 0);
+        $num >> $rhs
+    }};
+}
+
 #[derive(Debug, Clone, Copy)]
 enum LoHiRegister {
     Lo(Register),
     Hi(u8)
-}
-
-#[derive(Debug, Clone, Copy)]
-enum AddSubtractOpCode {
-    ADD,
-    SUB
-}
-
-#[derive(Debug, Clone, Copy)]
-struct AddSubtract {
-    op: AddSubtractOpCode,
-    roi: RegisterOrImmediate,
-    src: Register,
-    dest: Register
 }
 
 #[derive(Debug, Clone, Copy)]
