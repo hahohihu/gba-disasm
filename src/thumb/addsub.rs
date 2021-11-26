@@ -1,5 +1,5 @@
 use crate::RegisterOrImmediate;
-use crate::types::{Register, Immediate};
+use crate::types::{Register};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum AddSubtractOpCode {
