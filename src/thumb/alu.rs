@@ -1,6 +1,7 @@
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
 use crate::types::Register;
+use crate::get_bits;
 
 #[derive(Debug, Clone, Copy, FromPrimitive, PartialEq, Eq)]
 enum AluOpCode {
@@ -33,9 +34,9 @@ impl From<u16> for AluOperations {
     fn from(raw: u16) -> Self {
         assert!((raw >> 10) == 0b010000);
         AluOperations {
-            op: FromPrimitive::from_u8(((raw >> 6) & 0b1111) as u8).unwrap(),
-            src: Register(((raw >> 3) & 0b111) as u8),
-            dest: Register((raw & 0b111) as u8)
+            op: FromPrimitive::from_u8(get_bits!(raw, 9..6) as u8).unwrap(),
+            src: Register(get_bits!(raw, 5..3) as u8),
+            dest: Register(get_bits!(raw, 2..0) as u8)
         }
     }
 }

@@ -1,3 +1,5 @@
+use crate::get_bits;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct PcRelativeLoad { 
     immediate: u8,
@@ -8,8 +10,8 @@ impl From<u16> for PcRelativeLoad {
     fn from(raw: u16) -> Self {
         assert!((raw >> 11) == 0b01001);
         PcRelativeLoad { 
-            immediate: (raw & 0xFF) as u8,
-            dest: ((raw >> 8) & 0b111) as u8
+            immediate: get_bits!(raw, 7..0) as u8,
+            dest: get_bits!(raw, 10..8) as u8
         }
     }
 }

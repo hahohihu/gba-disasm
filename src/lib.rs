@@ -26,6 +26,14 @@ macro_rules! get_bits {
     }};
 }
 
+pub fn get_bit(input: u16, n: u8) -> u8 { 
+    if (input & (1 << n)) != 0 { 
+        1
+    } else {
+        0
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 enum LoHiRegister {
     Lo(Register),
@@ -46,9 +54,6 @@ struct MoveCompareAddSubtractImmediate {
     dest: Register,
     offset: Immediate
 }
-
-
-
 
 #[derive(Debug, Clone, Copy)]
 enum HiRegisterOpCode {
