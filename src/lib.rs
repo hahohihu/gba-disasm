@@ -3,6 +3,7 @@ mod thumb {
     pub mod msr;
     pub mod addsub;
     pub mod alu;
+    pub mod load_store_ext;
     pub mod pcrl;
     pub mod load_store_halfword;
 }
