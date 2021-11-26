@@ -2,6 +2,7 @@ mod types;
 mod thumb {
     pub mod msr;
     pub mod addsub;
+    pub mod alu;
 }
 
 use types::*;
@@ -42,32 +43,8 @@ struct MoveCompareAddSubtractImmediate {
     offset: Immediate
 }
 
-#[derive(Debug, Clone, Copy)]
-enum AluOperationsOpCode {
-    AND,
-    EOR,
-    LSL,
-    LSR,
-    ASR,
-    ADC,
-    SBC,
-    ROR,
-    TST,
-    NEG,
-    CMP,
-    CMN,
-    ORR,
-    MUL,
-    BIC,
-    MVN
-}
 
-#[derive(Debug, Clone, Copy)]
-struct AluOperations {
-    op: AluOperationsOpCode,
-    src: Register,
-    dest: Register
-}
+
 
 #[derive(Debug, Clone, Copy)]
 enum HiRegisterOpCode {
