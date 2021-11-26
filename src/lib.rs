@@ -95,7 +95,7 @@ fn decode_thumb(raw: u16) -> ThumbInstruction {
         0b101 => unimplemented!(),
         0b110 => unimplemented!(),
         0b111 => unimplemented!(),
-        _ => unreachable!("DEV ERROR")
+        _ => unreachable!()
     }
 }
 
