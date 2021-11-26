@@ -1,4 +1,4 @@
-use crate::{get_bits, types::{Register}};
+use crate::{get_bit, get_bits, types::{Register}};
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
 
@@ -20,7 +20,7 @@ struct LoadStoreSignExtended {
 
 impl From<u16> for LoadStoreSignExtended {
     fn from(raw: u16) -> Self {
-        assert!((raw & (1 << 9)) > 0);
+        assert!(get_bit(raw, 9) > 0);
         assert!((raw >> 12) == 0b0101);
 
         Self { 
