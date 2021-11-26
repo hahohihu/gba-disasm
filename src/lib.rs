@@ -2,10 +2,12 @@ mod types;
 mod thumb {
     pub mod msr;
     pub mod addsub;
+    pub mod op_immediate;
 }
 
 use types::*;
 use thumb::msr::MoveShiftedRegister;
+use thumb::op_immediate::OpImmediate;
 
 // Inclusive range - descending, with 0 on the right, similar to the ARM7 datasheet
 #[macro_export]
@@ -15,11 +17,11 @@ macro_rules! get_bits {
         ($num >> $rhs) & ((1 << ($lhs + 1 - $rhs)) - 1)
     }};
     ($num:expr, $lhs:literal..) => {{
-        assert!(lhs >= 0);
+        assert!($lhs >= 0);
         $num & ((1 << $lhs) - 1)
     }};
     ($num:expr, ..$rhs:literal) => {{
-        assert!(rhs >= 0);
+        assert!($rhs >= 0);
         $num >> $rhs
     }};
 }
@@ -28,21 +30,6 @@ macro_rules! get_bits {
 enum LoHiRegister {
     Lo(Register),
     Hi(u8)
-}
-
-#[derive(Debug, Clone, Copy)]
-enum MoveCompareAddSubtractImmediateOpCode {
-    MOV,
-    CMP,
-    ADD,
-    SUB
-}
-
-#[derive(Debug, Clone, Copy)]
-struct MoveCompareAddSubtractImmediate {
-    op: MoveCompareAddSubtractImmediateOpCode,
-    dest: Register,
-    offset: Immediate
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -89,18 +76,19 @@ struct HiRegisterOp {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum ThumbInstruction {
-    MSR(MoveShiftedRegister)
+    MSR(MoveShiftedRegister),
+    OpImmediate(OpImmediate)
 }
 
 fn decode_thumb(raw: u16) -> ThumbInstruction {
-    match raw >> 13 {
+    match get_bits!(raw, ..13) {
         0b000 => {
-            match raw >> 11 {
+            match get_bits!(raw, 12..11) {
                 0b11 => unimplemented!(),
-                _ => ThumbInstruction::MSR(MoveShiftedRegister::from(raw))
+                _ => ThumbInstruction::MSR(raw.into())
             }
         },
-        0b001 => unimplemented!(),
+        0b001 => ThumbInstruction::OpImmediate(raw.into()),
         0b010 => unimplemented!(),
         0b011 => unimplemented!(),
         0b100 => unimplemented!(),

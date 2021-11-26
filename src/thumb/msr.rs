@@ -1,11 +1,13 @@
 use crate::types::{Register, Immediate};
 use crate::get_bits;
+use num_derive::FromPrimitive;    
+use num_traits::FromPrimitive;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, FromPrimitive)]
 enum MoveShiftedRegisterOpCode {
-    LSL,
-    LSR,
-    ASR
+    LSL = 0,
+    LSR = 1,
+    ASR = 2
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -16,22 +18,11 @@ pub struct MoveShiftedRegister {
     dest: Register
 }
 
-impl MoveShiftedRegister {
-    fn parse_opcode(raw: u16) -> MoveShiftedRegisterOpCode {
-        match get_bits!(raw, 12..11) {
-            0 => MoveShiftedRegisterOpCode::LSL,
-            1 => MoveShiftedRegisterOpCode::LSR,
-            2 => MoveShiftedRegisterOpCode::ASR,
-            _ => unreachable!()
-        }
-    }
-}
-
 impl From<u16> for MoveShiftedRegister {
     fn from(raw: u16) -> Self {
         assert!(get_bits!(raw, 15..13) == 0);
         MoveShiftedRegister {
-            op: MoveShiftedRegister::parse_opcode(raw),
+            op: FromPrimitive::from_u16(get_bits!(raw, 12..11)).unwrap(),
             offset: get_bits!(raw, 10..6) as u8,
             src: Register(get_bits!(raw, 5..3) as u8),
             dest: Register(get_bits!(raw, 2..0) as u8)
@@ -73,9 +64,9 @@ mod test {
     proptest! {
         #[test]
         fn values_match(
-            offset in 0..0b100000 as u16,
-            src in 0..0b1000 as u16,
-            dest in 0..0b1000 as u16
+            offset in 0..(1 << 5) as u16,
+            src in 0..(1 << 3) as u16,
+            dest in 0..(1 << 3) as u16
         ) {
             let msr = MoveShiftedRegister {
                 op: MoveShiftedRegisterOpCode::LSL,
