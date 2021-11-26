@@ -15,11 +15,11 @@ macro_rules! get_bits {
         ($num >> $rhs) & ((1 << ($lhs + 1 - $rhs)) - 1)
     }};
     ($num:expr, $lhs:literal..) => {{
-        assert!(lhs >= 0);
+        assert!($lhs >= 0);
         $num & ((1 << $lhs) - 1)
     }};
     ($num:expr, ..$rhs:literal) => {{
-        assert!(rhs >= 0);
+        assert!($rhs >= 0);
         $num >> $rhs
     }};
 }
