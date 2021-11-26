@@ -34,30 +34,28 @@ impl From<u16> for MoveShiftedRegister {
 mod test {
     use crate::thumb::msr::{MoveShiftedRegister, MoveShiftedRegisterOpCode};
     use crate::{Register, ThumbInstruction, decode_thumb};
+    use test_case::test_case;
 
-    #[test]
-    fn values() {
-        let matches = [(MoveShiftedRegister {
-            op: MoveShiftedRegisterOpCode::LSL,
-            offset: 0b11001,
-            src: Register(0b100),
-            dest: Register(0b011)
-        }, 0b000_00_11001_100_011 as u16),
-        (MoveShiftedRegister {
-            op: MoveShiftedRegisterOpCode::LSR,
-            offset: 0b10000,
-            src: Register(0b001),
-            dest: Register(0b111)
-        }, 0b000_01_10000_001_111 as u16),
-        (MoveShiftedRegister {
-            op: MoveShiftedRegisterOpCode::ASR,
-            offset: 0b11001,
-            src: Register(0b100),
-            dest: Register(0b011)
-        }, 0b000_10_11001_100_011 as u16)];
-        for (msr, binary) in matches {
-            assert_eq!(ThumbInstruction::MSR(msr), decode_thumb(binary));
-        }
+    #[test_case(MoveShiftedRegister {
+        op: MoveShiftedRegisterOpCode::LSL,
+        offset: 0b11001,
+        src: Register(0b100),
+        dest: Register(0b011)
+    }, 0b000_00_11001_100_011)]
+    #[test_case(MoveShiftedRegister {
+        op: MoveShiftedRegisterOpCode::LSR,
+        offset: 0b10000,
+        src: Register(0b001),
+        dest: Register(0b111)
+    }, 0b000_01_10000_001_111)]
+    #[test_case(MoveShiftedRegister {
+        op: MoveShiftedRegisterOpCode::ASR,
+        offset: 0b11001,
+        src: Register(0b100),
+        dest: Register(0b011)
+    }, 0b000_10_11001_100_011)]
+    fn opcode(msr: MoveShiftedRegister, binary: u16) {
+        assert_eq!(ThumbInstruction::MSR(msr), decode_thumb(binary));
     }
 
     use proptest::prelude::*;

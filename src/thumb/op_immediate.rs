@@ -32,13 +32,30 @@ impl From<u16> for OpImmediate {
 #[cfg(test)]
 mod test {
     use crate::{Register, ThumbInstruction, decode_thumb, thumb::op_immediate::{OpImmediate, OpImmediateOpCode}};
+    use test_case::test_case;
 
-    #[test]
-    fn values() {
-        let matches = [];
-        for (op_immediate, binary) in matches {
-            assert_eq!(ThumbInstruction::OpImmediate(op_immediate), decode_thumb(binary));
-        }
+    #[test_case(OpImmediate { 
+        op: OpImmediateOpCode::MOV, 
+        dest: Register(0b101), 
+        offset: 0b00010001 
+    }, 0b001_00_101_00010001)]
+    #[test_case(OpImmediate { 
+        op: OpImmediateOpCode::CMP, 
+        dest: Register(0b101), 
+        offset: 0b00010001 
+    }, 0b001_01_101_00010001)]
+    #[test_case(OpImmediate { 
+        op: OpImmediateOpCode::ADD, 
+        dest: Register(0b000), 
+        offset: 0b00000000 
+    }, 0b001_10_000_00000000)]
+    #[test_case(OpImmediate { 
+        op: OpImmediateOpCode::SUB, 
+        dest: Register(0b001), 
+        offset: 0b11111110 
+    }, 0b001_11_001_11111110)]
+    fn opcode(opcode: OpImmediate, binary: u16) {
+        assert_eq!(ThumbInstruction::OpImmediate(opcode), decode_thumb(binary));
     }
 
     use proptest::prelude::*;
