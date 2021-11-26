@@ -1,5 +1,6 @@
 use crate::RegisterOrImmediate;
-use crate::types::{Register};
+use crate::types::Register;
+use crate::{get_bits, get_bit};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum AddSubtractOpCode {
@@ -17,13 +18,13 @@ struct AddSubtract {
 
 impl From<u16> for AddSubtract {
     fn from(raw: u16) -> Self { 
-        assert!((raw >> 11) == 0b00011);
+        assert!(get_bits!(raw, 15..11) == 0b00011);
 
         AddSubtract {
             op: AddSubtract::parse_opcode(raw),
             roi: AddSubtract::parse_roi(raw),
-            src: Register(((raw >> 3) & 0b111) as u8),
-            dest: Register((raw & 0b111) as u8)
+            src: Register(get_bits!(raw, 5..3) as u8),
+            dest: Register(get_bits!(raw, 2..0) as u8)
         }
     }
 }
@@ -31,15 +32,15 @@ impl From<u16> for AddSubtract {
 impl AddSubtract { 
     fn parse_roi(raw: u16) -> RegisterOrImmediate { 
         match (raw >> 10) & 1 {
-            0 => RegisterOrImmediate::Register(Register(((raw >> 6) & 0b111) as u8)),
-            1 => RegisterOrImmediate::Immediate(((raw >> 6) & 0b111) as u8),
+            0 => RegisterOrImmediate::Register(Register(get_bits!(raw, 8..6) as u8)),
+            1 => RegisterOrImmediate::Immediate(get_bits!(raw, 8..6) as u8),
             _ => unreachable!()
         } 
     }
 
     fn parse_opcode(raw: u16) -> AddSubtractOpCode {
-        let op_value = raw & (1 << 9);
-        match op_value >> 9 {
+        let value = get_bit(raw, 9);
+        match value {
             0 => AddSubtractOpCode::ADD,
             1 => AddSubtractOpCode::SUB,
             _ => unreachable!()
@@ -50,7 +51,7 @@ impl AddSubtract {
 #[cfg(test)]
 mod test {
     use crate::thumb::addsub::{AddSubtractOpCode, AddSubtract};
-    use crate::types::{Register, Immediate};
+    use crate::types::Register;
     use crate::RegisterOrImmediate;
 
     #[test] 
