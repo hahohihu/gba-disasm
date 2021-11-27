@@ -1,4 +1,4 @@
-use crate::types::{Register, Immediate};
+use crate::types::Register;
 use crate::get_bits;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
@@ -13,7 +13,7 @@ enum MoveShiftedRegisterOpCode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MoveShiftedRegister {
     op: MoveShiftedRegisterOpCode, // TODO: enum
-    offset: Immediate,
+    offset: u8,
     src: Register,
     dest: Register
 }

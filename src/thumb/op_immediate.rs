@@ -1,4 +1,4 @@
-use crate::types::{Register, Immediate};
+use crate::types::Register;
 use crate::get_bits;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
@@ -15,7 +15,7 @@ pub enum OpImmediateOpCode {
 pub struct OpImmediate {
     op: OpImmediateOpCode,
     dest: Register,
-    offset: Immediate
+    offset: u8
 }
 
 impl From<u16> for OpImmediate {
