@@ -5,6 +5,7 @@ mod thumb {
     pub mod alu;
     pub mod load_store_ext;
     pub mod pcrl;
+    pub mod load_addr;
 }
 
 use types::*;
