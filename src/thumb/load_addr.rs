@@ -30,7 +30,6 @@ impl From<u16> for LoadAddress {
 
 #[cfg(test)]
 mod test {
-    use crate::ThumbInstruction;
     use crate::thumb::load_addr::{LoadAddress, Source};
     use crate::types::Register;
     use num_traits::FromPrimitive;

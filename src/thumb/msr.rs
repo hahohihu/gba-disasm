@@ -1,5 +1,6 @@
 use crate::types::Register;
 use crate::get_bits;
+use contracts::debug_requires;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
 
@@ -12,15 +13,16 @@ enum MoveShiftedRegisterOpCode {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MoveShiftedRegister {
-    op: MoveShiftedRegisterOpCode, // TODO: enum
+    op: MoveShiftedRegisterOpCode,
     offset: u8,
     src: Register,
     dest: Register
 }
 
 impl From<u16> for MoveShiftedRegister {
+    #[debug_requires(get_bits!(raw, 15..13) == 0)]
+    #[debug_requires(get_bits!(raw, 12..11) != 0b11)]
     fn from(raw: u16) -> Self {
-        assert!(get_bits!(raw, 15..13) == 0);
         MoveShiftedRegister {
             op: FromPrimitive::from_u16(get_bits!(raw, 12..11)).unwrap(),
             offset: get_bits!(raw, 10..6) as u8,
