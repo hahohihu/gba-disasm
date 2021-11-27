@@ -3,8 +3,8 @@ use num_traits::FromPrimitive;
 use crate::{get_bit, get_bits, types::Register};
 #[derive(Debug, Clone, Copy, FromPrimitive, PartialEq, Eq)]
 enum LoadStore { 
-    Load = 0b0,
-    Store = 0b1
+    Store = 0b0,
+    Load = 0b1,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -66,8 +66,8 @@ mod test {
         }
     }
 
-    #[test_case(0b1000, 0, LoadStore::Load  ;  "LOAD")]
-    #[test_case(0b1000, 1, LoadStore::Store ; "STORE")]
+    #[test_case(0b1000, 0, LoadStore::Store ; "STORE")]
+    #[test_case(0b1000, 1, LoadStore::Load  ;  "LOAD")]
     fn mode(template: u16, value: u16, expected: LoadStore) { 
         assert_eq!(expected, LoadStoreHalfword::from((template << 12) | (value << 11)).mode)
     }
