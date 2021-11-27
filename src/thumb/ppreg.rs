@@ -34,3 +34,47 @@ impl From<u16> for PushPopRegisters {
         }
     }
 }
+
+
+#[cfg(test)]
+mod test { 
+    use crate::thumb::ppreg::{PushPopRegisters, PCLR, LoadStore};
+    use num_traits::FromPrimitive;
+    use test_case::test_case;
+
+    #[test_case(0b1011_0_10000000000, LoadStore::Store ;  "Store")]
+    #[test_case(0b1011_1_10000000000, LoadStore::Load  ;   "Load")]
+    fn load_store(input: u16, expected: LoadStore) { 
+        assert_eq!(PushPopRegisters::from(input).mode, expected);
+    }
+
+
+    #[test_case(0b1011010_0_00000000, PCLR::DoNotStoreLoad ; "DoNotStoreLoad")]
+    #[test_case(0b1011010_1_00000000, PCLR::StoreLoad ; "StoreLoad")]
+    fn pclr(input: u16, expected: PCLR) {
+        assert_eq!(PushPopRegisters::from(input).pclr, expected)
+    }
+
+    use proptest::prelude::*;
+
+    proptest! { 
+        #[test]
+
+        fn props(
+            pclr in 0..1 as u16,
+            mode in 0..1 as u16,
+            rlist in 0..0b11111111 as u16
+        ) {
+            let ppreg = PushPopRegisters {
+                pclr: FromPrimitive::from_u8(pclr as u8).unwrap(),
+                mode: FromPrimitive::from_u8(mode as u8).unwrap(),
+                rlist: rlist as u8
+            };
+
+            let base = 0b1011_0100_0000_0000;
+            let decoded_instruction = PushPopRegisters::from(base | (pclr << 8) | (mode << 11) | rlist);
+
+            prop_assert_eq!(ppreg, decoded_instruction);
+        }
+    }
+}
