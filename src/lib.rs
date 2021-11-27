@@ -1,9 +1,11 @@
+#![allow(clippy::upper_case_acronyms)]
 mod types;
 mod thumb {
     pub mod msr;
     pub mod addsub;
     pub mod op_immediate;
     pub mod alu;
+    pub mod hi_op;
     pub mod load_store_ext;
     pub mod pcrl;
     pub mod load_store_halfword;
@@ -13,6 +15,7 @@ mod thumb {
 use types::*;
 use thumb::msr::MoveShiftedRegister;
 use thumb::op_immediate::OpImmediate;
+use thumb::hi_op::HiOp;
 
 // Inclusive range - descending, with 0 on the right, similar to the ARM7 datasheet
 #[macro_export]
@@ -39,34 +42,14 @@ pub fn get_bit(input: u16, n: u8) -> u8 {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
-enum LoHiRegister {
-    Lo(Register),
-    Hi(u8)
-}
-
-#[derive(Debug, Clone, Copy)]
-enum HiRegisterOpCode {
-    ADD,
-    CMP,
-    MOV,
-    BX
-}
-
-#[derive(Debug, Clone, Copy)]
-struct HiRegisterOp {
-    opcode: HiRegisterOpCode,
-    src: LoHiRegister,
-    dst: LoHiRegister
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum ThumbInstruction {
+pub enum ThumbInstruction {
     MSR(MoveShiftedRegister),
-    OpImmediate(OpImmediate)
+    OpImmediate(OpImmediate),
+    HiOp(HiOp)
 }
 
-fn decode_thumb(raw: u16) -> ThumbInstruction {
+pub fn decode_thumb(raw: u16) -> ThumbInstruction {
     match get_bits!(raw, ..13) {
         0b000 => {
             match get_bits!(raw, 12..11) {
@@ -75,7 +58,13 @@ fn decode_thumb(raw: u16) -> ThumbInstruction {
             }
         },
         0b001 => ThumbInstruction::OpImmediate(raw.into()),
-        0b010 => unimplemented!(),
+        0b010 => {
+            if get_bits!(raw, 12..10) == 0b001 {
+                ThumbInstruction::HiOp(raw.into())
+            } else {
+                unimplemented!()
+            }
+        },
         0b011 => unimplemented!(),
         0b100 => unimplemented!(),
         0b101 => unimplemented!(),
