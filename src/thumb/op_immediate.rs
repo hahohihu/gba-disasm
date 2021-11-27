@@ -2,6 +2,7 @@ use crate::types::Register;
 use crate::get_bits;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
+use contracts::requires;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, FromPrimitive)]
 pub enum OpImmediateOpCode {
@@ -19,6 +20,7 @@ pub struct OpImmediate {
 }
 
 impl From<u16> for OpImmediate {
+    #[requires(get_bits!(raw, 15..13) == 0b001)]
     fn from(raw: u16) -> Self {
         OpImmediate {
             op: FromPrimitive::from_u16(get_bits!(raw, 12..11)).unwrap(),
