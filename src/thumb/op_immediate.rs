@@ -33,7 +33,9 @@ impl From<u16> for OpImmediate {
 
 #[cfg(test)]
 mod test {
-    use crate::{Register, ThumbInstruction, decode_thumb, thumb::op_immediate::{OpImmediate, OpImmediateOpCode}};
+    use crate::types::{Register};
+    use super::{OpImmediate, OpImmediateOpCode};
+    use crate::{ThumbInstruction, decode_thumb};
     use test_case::test_case;
 
     #[test_case(OpImmediate { 

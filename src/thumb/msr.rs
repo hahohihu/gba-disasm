@@ -35,7 +35,8 @@ impl From<u16> for MoveShiftedRegister {
 #[cfg(test)]
 mod test {
     use crate::thumb::msr::{MoveShiftedRegister, MoveShiftedRegisterOpCode};
-    use crate::{Register, ThumbInstruction, decode_thumb};
+    use crate::{ThumbInstruction, decode_thumb};
+    use crate::types::{Register};
     use test_case::test_case;
 
     #[test_case(MoveShiftedRegister {
