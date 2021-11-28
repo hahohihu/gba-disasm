@@ -49,7 +49,7 @@ mod test {
     proptest! { 
         #[test] 
         fn props (
-           soffset8 in 0..i8::MAX 
+           soffset8 in i8::MIN..i8::MAX 
         ) {
             let cb = ConditionalBranch {
                 cond: Condition::BEQ,
@@ -57,7 +57,8 @@ mod test {
             };
 
             let base: u16 = 0b1101_0000_0000_0000;
-            let decoded_instruction = ConditionalBranch::from(base | (soffset8 as u16));
+            let raw_offset = soffset8 as u8;
+            let decoded_instruction = ConditionalBranch::from(base | (raw_offset as u16));
 
             prop_assert_eq!(cb, decoded_instruction);
         }
