@@ -2,7 +2,7 @@ use num_traits::FromPrimitive;
 use crate::{get_bit, get_bits, types::{Register, LoadStore}};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct LoadStoreHalfword { 
+pub struct LoadStoreHalfword { 
     dest: Register,
     base: Register,
     offset: u8,

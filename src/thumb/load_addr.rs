@@ -10,7 +10,7 @@ enum Source {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct LoadAddress { 
+pub struct LoadAddress { 
     src: Source,
     dest: Register,
     word8: u8

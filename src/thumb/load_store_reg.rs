@@ -3,7 +3,7 @@ use num_traits::FromPrimitive;
 use crate::{get_bit, get_bits, types::{Register, LoadStore, ByteWord}};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct LoadStoreReg {
+pub struct LoadStoreReg {
     bw: ByteWord,
     ls: LoadStore,
     offset: Register,

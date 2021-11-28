@@ -8,7 +8,7 @@ enum AddSubtractOpCode {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct AddSubtract {
+pub struct AddSubtract {
     op: AddSubtractOpCode,
     roi: RegisterOrImmediate,
     src: Register,

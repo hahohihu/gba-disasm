@@ -16,7 +16,7 @@ enum LoadStore {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct PushPopRegisters { 
+pub struct PushPopRegisters { 
     pclr: PCLR,
     mode: LoadStore,
     rlist: u8

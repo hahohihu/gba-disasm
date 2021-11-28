@@ -11,7 +11,7 @@ enum LoadStoreAction {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct LoadStoreSignExtended {
+pub struct LoadStoreSignExtended {
     dest: Register,
     base: Register,
     offset: Register,

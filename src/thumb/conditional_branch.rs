@@ -4,7 +4,7 @@ use crate::types::Condition;
 use crate::get_bits;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct ConditionalBranch { 
+pub struct ConditionalBranch { 
     cond: Condition,
     soffset8: i8 
 }
@@ -23,7 +23,7 @@ impl From<u16> for ConditionalBranch {
 
 #[cfg(test)]
 mod test { 
-    use crate::{thumb::cb::ConditionalBranch, types::Condition};
+    use crate::{thumb::conditional_branch::ConditionalBranch, types::Condition};
     use test_case::test_case;
 
     #[test_case(0b1101_0000_00000000, Condition::BEQ ; "BEQ")]

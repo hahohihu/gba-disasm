@@ -1,7 +1,7 @@
 use crate::get_bits;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct PcRelativeLoad { 
+pub struct PcRelativeLoad { 
     immediate: u8,
     dest: u8
 }

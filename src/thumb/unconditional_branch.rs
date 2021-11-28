@@ -1,7 +1,7 @@
 use crate::get_bits;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct UnconditionalBranch { 
+pub struct UnconditionalBranch { 
     offset11: u16,
 }
 
@@ -18,7 +18,7 @@ impl From<u16> for UnconditionalBranch {
 
 #[cfg(test)]
 mod test { 
-    use crate::thumb::ucb::UnconditionalBranch;
+    use crate::thumb::unconditional_branch::UnconditionalBranch;
     use proptest::prelude::*;
 
     proptest! { 

@@ -24,7 +24,7 @@ enum AluOpCode {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-struct AluOperations {
+pub struct AluOperations {
     op: AluOpCode,
     src: Register,
     dest: Register
