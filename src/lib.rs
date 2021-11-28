@@ -1,20 +1,7 @@
 #![allow(clippy::upper_case_acronyms)]
 mod types;
-mod thumb {
-    pub mod msr;
-    pub mod addsub;
-    pub mod op_immediate;
-    pub mod alu;
-    pub mod hi_op;
-    pub mod load_store_ext;
-    pub mod pcrl;
-    pub mod ppreg;
-    pub mod load_store_reg;
-    pub mod load_store_halfword;
-    pub mod load_addr;
-}
+mod thumb;
 
-use types::*;
 use thumb::msr::MoveShiftedRegister;
 use thumb::op_immediate::OpImmediate;
 use thumb::hi_op::HiOp;
