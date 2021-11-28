@@ -23,7 +23,7 @@ mod test {
 
     proptest! { 
         #[test]
-        fn props(offset11 in 0_u16..0b11111111111) {
+        fn props(offset11 in 0_u16..(1 << 11)) {
             let ucb = UnconditionalBranch { 
                 offset11: offset11
             };
