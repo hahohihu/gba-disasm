@@ -59,7 +59,6 @@ mod test {
 
     proptest! { 
         #[test]
-
         fn props(
             pclr in 0..1 as u16,
             mode in 0..1 as u16,
