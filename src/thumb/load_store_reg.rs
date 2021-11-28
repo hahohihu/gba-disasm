@@ -55,9 +55,9 @@ mod test {
             target in 0..(1 << 3) as u16,
         ) {
             let lsr = LoadStoreReg::from(0b0101_0_0_0_000_000_000 | (offset << 6) | (base << 3) | (target));
-            assert_eq!(lsr.offset, Register(offset as u8));
-            assert_eq!(lsr.base, Register(base as u8));
-            assert_eq!(lsr.target, Register(target as u8));
+            prop_assert_eq!(lsr.offset, Register(offset as u8));
+            prop_assert_eq!(lsr.base, Register(base as u8));
+            prop_assert_eq!(lsr.target, Register(target as u8));
         }
     }
 }
