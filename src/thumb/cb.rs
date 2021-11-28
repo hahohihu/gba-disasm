@@ -12,6 +12,7 @@ struct ConditionalBranch {
 impl From<u16> for ConditionalBranch {
     fn from(raw: u16) -> Self {
         debug_assert!(get_bits!(raw, 15..12) == 0b1101);
+        debug_assert!(get_bits!(raw, 11..8) != 0b1110);
 
         Self { 
             cond: FromPrimitive::from_u8(get_bits!(raw, 11..8) as u8).unwrap(),

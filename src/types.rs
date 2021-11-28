@@ -36,6 +36,5 @@ pub enum Condition {
     BGE = 0b1010,
     BLT = 0b1011,
     BGT = 0b1100,
-    BLE = 0b1101,
-    SWI = 0b1111
+    BLE = 0b1101
 }
