@@ -9,4 +9,5 @@ pub mod ppreg;
 pub mod load_store_reg;
 pub mod load_store_halfword;
 pub mod load_addr;
+pub mod ucb;
 pub mod cb;
