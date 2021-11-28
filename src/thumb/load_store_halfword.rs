@@ -1,11 +1,5 @@
-use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
-use crate::{get_bit, get_bits, types::Register};
-#[derive(Debug, Clone, Copy, FromPrimitive, PartialEq, Eq)]
-enum LoadStore { 
-    Store = 0b0,
-    Load = 0b1,
-}
+use crate::{get_bit, get_bits, types::{Register, LoadStore}};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct LoadStoreHalfword { 
