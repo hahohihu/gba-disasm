@@ -35,7 +35,7 @@ impl From<u16> for MoveShiftedRegister {
 #[cfg(test)]
 mod test {
     use crate::thumb::msr::{MoveShiftedRegister, MoveShiftedRegisterOpCode};
-    use crate::{Register, ThumbInstruction, decode_thumb};
+    use crate::types::{Register};
     use test_case::test_case;
 
     #[test_case(MoveShiftedRegister {
@@ -57,7 +57,7 @@ mod test {
         dest: Register(0b011)
     }, 0b000_10_11001_100_011)]
     fn opcode(msr: MoveShiftedRegister, binary: u16) {
-        assert_eq!(ThumbInstruction::MSR(msr), decode_thumb(binary));
+        assert_eq!(msr, MoveShiftedRegister::from(binary));
     }
 
     use proptest::prelude::*;
@@ -68,13 +68,10 @@ mod test {
             src in 0..(1 << 3) as u16,
             dest in 0..(1 << 3) as u16
         ) {
-            let msr = MoveShiftedRegister {
-                op: MoveShiftedRegisterOpCode::LSL,
-                offset: offset as u8,
-                src: Register(src as u8),
-                dest: Register(dest as u8)
-            };
-            prop_assert_eq!(ThumbInstruction::MSR(msr), decode_thumb((offset << 6) | (src << 3) | dest));
+            let msr = MoveShiftedRegister::from((offset << 6) | (src << 3) | dest);
+            prop_assert_eq!(msr.offset, offset as u8);
+            prop_assert_eq!(msr.src.0, src as u8);
+            prop_assert_eq!(msr.dest.0, dest as u8);
         }
     }
 }

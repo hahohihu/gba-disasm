@@ -48,8 +48,8 @@ impl From<u16> for HiOp {
 
 #[cfg(test)]
 mod test {
-    use crate::{ThumbInstruction, decode_thumb, thumb::hi_op::LoHiRegister, types::Register};
-    use super::{HiOp, HiOpCode};
+    use crate::types::Register;
+    use super::{HiOp, HiOpCode, LoHiRegister};
     use test_case::test_case;
 
     #[test_case(HiOpCode::ADD, 0b010001_00_00000000)]
@@ -57,10 +57,7 @@ mod test {
     #[test_case(HiOpCode::MOV, 0b010001_10_00000000)]
     #[test_case(HiOpCode::BX, 0b010001_11_00000000)]
     fn opcode_matches(hi_op: HiOpCode, raw: u16) {
-        match decode_thumb(raw) {
-            ThumbInstruction::HiOp(inner) => assert_eq!(inner.op, hi_op),
-            _ => unreachable!()
-        }
+        assert_eq!(HiOp::from(raw).op, hi_op);
     }
 
     use proptest::prelude::*;
@@ -76,12 +73,8 @@ mod test {
                 LoHiRegister::Lo(Register(val))
             };
             let high_reg = if hi { 1 } else { 0 } as u16;
-            let hiop = HiOp {
-                op: HiOpCode::ADD,
-                src: reg,
-                dest: LoHiRegister::Lo(Register(0))
-            };
-            prop_assert_eq!(ThumbInstruction::HiOp(hiop), decode_thumb((0b010001 << 10) | (high_reg << 6) | ((val as u16) << 3)));
+            let hiop = HiOp::from((0b010001 << 10) | (high_reg << 6) | ((val as u16) << 3));
+            prop_assert_eq!(hiop.src, reg);
         }
 
         #[test]
@@ -95,12 +88,8 @@ mod test {
                 LoHiRegister::Lo(Register(val))
             };
             let high_reg = if hi { 1 } else { 0 } as u16;
-            let hiop = HiOp {
-                op: HiOpCode::ADD,
-                dest: reg,
-                src: LoHiRegister::Lo(Register(0))
-            };
-            prop_assert_eq!(ThumbInstruction::HiOp(hiop), decode_thumb((0b010001 << 10) | (high_reg << 7) | (val as u16)));
+            let hiop = HiOp::from((0b010001 << 10) | (high_reg << 7) | (val as u16));
+            prop_assert_eq!(hiop.dest, reg)
         }
     }
 }

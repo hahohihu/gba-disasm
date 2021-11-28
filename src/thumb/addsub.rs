@@ -1,5 +1,4 @@
-use crate::RegisterOrImmediate;
-use crate::types::Register;
+use crate::types::{Register, RegisterOrImmediate};
 use crate::{get_bits, get_bit};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -51,8 +50,7 @@ impl AddSubtract {
 #[cfg(test)]
 mod test {
     use crate::thumb::addsub::{AddSubtractOpCode, AddSubtract};
-    use crate::types::Register;
-    use crate::RegisterOrImmediate;
+    use crate::types::{Register, RegisterOrImmediate};
 
     #[test] 
     fn op_0_add() { 
