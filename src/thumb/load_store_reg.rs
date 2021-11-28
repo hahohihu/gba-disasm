@@ -29,7 +29,7 @@ impl From<u16> for LoadStoreReg {
 #[cfg(test)]
 mod test {
     use super::LoadStoreReg;
-    use crate::{Register, ThumbInstruction, decode_thumb, LoadStore, ByteWord};
+    use crate::types::{Register, LoadStore, ByteWord};
     use test_case::test_case;
 
     #[test_case(ByteWord::Byte, 1)]
