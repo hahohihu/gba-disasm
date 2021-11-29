@@ -49,7 +49,6 @@ pub fn get_bit(input: u16, n: u8) -> u8 {
 pub enum ThumbInstruction {
     MoveShiftedRegister(MoveShiftedRegister),
     AddSubtract(AddSubtract),
-    //Move/compare/add/sub immediate
     AluOperations(AluOperations),
     OpImmediate(OpImmediate),
     HiOp(HiOp),
@@ -133,6 +132,44 @@ pub fn decode_thumb(raw: u16) -> ThumbInstruction {
             }
         },
         _ => unreachable!()
+    }
+}
+
+#[cfg(test)]
+mod test { 
+    use crate::{ThumbInstruction, decode_thumb};
+
+    #[test]
+    fn decode_msr() { 
+        assert!(matches!(decode_thumb(0 as u16), ThumbInstruction::MoveShiftedRegister(_)))
+    }
+
+    #[test]
+    fn decode_add_subtract() { 
+        assert!(matches!(decode_thumb(0b11 << 11u16), ThumbInstruction::AddSubtract(_)))
+    }
+
+    #[test]
+    fn decode_op_immediate() { 
+        assert!(matches!(decode_thumb(0b001 << 13u16), ThumbInstruction::OpImmediate(_)));
+    }
+
+    #[test]
+    fn decode_alu_match() { 
+        assert!(matches!(decode_thumb(1 << 14u16), ThumbInstruction::AluOperations(_)));
+    }
+
+    #[test]
+    fn decode_alu_close_match() { 
+        assert!(!matches!(decode_thumb((1 << 14u16) | (1 << 10u16)), ThumbInstruction::AluOperations(_)));
+        assert!(!matches!(decode_thumb((1 << 14u16) | (1 << 11u16)), ThumbInstruction::AluOperations(_)));
+        assert!(!matches!(decode_thumb((1 << 14u16) | (1 << 12u16)), ThumbInstruction::AluOperations(_)));
+        assert!(!matches!(decode_thumb((1 << 14u16) | (1 << 12u16) | (1 << 9u16)), ThumbInstruction::AluOperations(_)));
+    }
+
+    #[test]
+    fn decode_hiop() { 
+        assert!(matches!(decode_thumb(0b10001 << 10u16), ThumbInstruction::HiOp(_)));
     }
 }
 
